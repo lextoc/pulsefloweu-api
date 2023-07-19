@@ -3,19 +3,13 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.2.2'
 
-gem 'dotenv-rails', '~> 2.8', '>= 2.8.1', groups: %i[development test]
-
-group :development, :test do
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
-end
-
-group :development do
-end
-
 gem 'awesome_print', '~> 1.9'
 gem 'bootsnap', require: false
+gem 'debug', platforms: %i[mri mingw x64_mingw], groups: %i[development test]
 gem 'devise', '~> 4.9'
 gem 'devise_token_auth', '~> 1.2'
+gem 'dotenv-rails', '~> 2.8', '>= 2.8.1', groups: %i[development test]
+gem 'kaminari', '~> 1.2'
 gem 'omniauth', '~> 2.1'
 gem 'omniauth-google-oauth2', '~> 1.1'
 gem 'pg', '~> 1.1'

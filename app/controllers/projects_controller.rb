@@ -2,7 +2,8 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render json: current_user.projects.all
+    projects = current_user.projects.all.page(params[:page])
+    render_data projects
   end
 
   def show

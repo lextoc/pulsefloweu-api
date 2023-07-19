@@ -2,7 +2,8 @@ class TimesheetsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render json: current_user.timesheets.all
+    timesheets = current_user.timesheets.page(params[:page] || 1)
+    render_data timesheets
   end
 
   def show

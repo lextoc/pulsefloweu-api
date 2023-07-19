@@ -2,7 +2,8 @@ class FoldersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    render json: current_user.folders.all
+    folders = current_user.folders.all.page(params[:page] || 1)
+    render_data folders
   end
 
   def show
