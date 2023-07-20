@@ -5,6 +5,7 @@ ruby '3.2.2'
 
 gem 'awesome_print', '~> 1.9'
 gem 'bootsnap', require: false
+gem 'cancancan', '~> 3.5'
 gem 'debug', platforms: %i[mri mingw x64_mingw], groups: %i[development test]
 gem 'devise', '~> 4.9'
 gem 'devise_token_auth', '~> 1.2'

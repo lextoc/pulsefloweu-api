@@ -3,27 +3,34 @@ class ProjectsController < ApplicationController
 
   def index
     projects = current_user.projects.all.page(params[:page])
+    authorize! :read, projects
     render_data projects
   end
 
   def show
     project = current_user.projects.find(params[:id])
+    authorize! :read, project
     render json: project
   end
 
   def create
-    project = current_user.projects.create(project_params)
+    project = current_user.projects.new(project_params)
+    authorize! :create, project
+    project.save
     render json: project
   end
 
   def update
     project = current_user.projects.find(params[:id])
+    authorize! :update, project
     project.update(project_params)
     render json: project
   end
 
   def destroy
-    current_user.projects.destroy(params[:id])
+    project = current_user.projects.find(params[:id])
+    authorize! :destroy, project
+    project.destroy
   end
 
   private
