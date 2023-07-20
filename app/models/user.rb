@@ -6,7 +6,8 @@ class User < ApplicationRecord
          :omniauthable
   include DeviseTokenAuth::Concerns::User
 
-  has_many :projects, dependent: :destroy
+  has_many :project_users, dependent: :destroy
+  has_many :projects, through: :project_users # TODO: `dependent: :destroy`
   has_many :folders, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :timesheets, dependent: :destroy

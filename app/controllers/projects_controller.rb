@@ -14,9 +14,18 @@ class ProjectsController < ApplicationController
   end
 
   def create
+    # Create the project.
     project = current_user.projects.new(project_params)
+    project.user = current_user
     authorize! :create, project
-    project.save
+
+    # Also create the project user relation.
+    if project.save
+      project_user = project.project_users.new(user: current_user, creator: current_user, role: :admin)
+      authorize! :create, project_user
+      project.save
+    end
+
     render json: project
   end
 
