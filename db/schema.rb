@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_20_163543) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_21_073201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_20_163543) do
     t.datetime "updated_at", null: false
     t.index ["project_id"], name: "index_folders_on_project_id"
     t.index ["user_id"], name: "index_folders_on_user_id"
+  end
+
+  create_table "folders_users", id: false, force: :cascade do |t|
+    t.bigint "folder_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "creator_id", null: false
+    t.integer "role"
+    t.boolean "can_view_others_tasks", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_folders_users_on_creator_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -37,6 +48,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_20_163543) do
     t.bigint "user_id", null: false
     t.bigint "creator_id", null: false
     t.integer "role"
+    t.boolean "can_view_others_tasks", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["creator_id"], name: "index_projects_users_on_creator_id"
@@ -101,6 +113,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_20_163543) do
 
   add_foreign_key "folders", "projects"
   add_foreign_key "folders", "users"
+  add_foreign_key "folders_users", "users", column: "creator_id"
   add_foreign_key "projects", "users"
   add_foreign_key "projects_users", "users", column: "creator_id"
   add_foreign_key "tasks", "folders"
