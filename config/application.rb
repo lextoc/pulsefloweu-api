@@ -25,7 +25,7 @@ module TrackyApi
     config.api_only = true
 
     config.session_store :cookie_store, key: "_tracky_session_#{Rails.env}"
-    config.middleware.insert_after ActiveRecord::Migration::CheckPending, ActionDispatch::Cookies
+    # config.middleware.insert_after ActiveRecord::Migration::CheckPending, ActionDispatch::Cookies
     config.middleware.insert_after ActionDispatch::Cookies, ActionDispatch::Session::CookieStore
 
     config.middleware.use ActionDispatch::Flash
