@@ -1,10 +1,8 @@
 class Task < ApplicationRecord
   belongs_to :user
-  belongs_to :project
   belongs_to :folder
 
-  validates :name, presence: true
+  validates_length_of :name, minimum: 1, maximum: 100, allow_blank: false
   validates :user, presence: true
-  validates :project, presence: true
   validates :folder, presence: true
 end

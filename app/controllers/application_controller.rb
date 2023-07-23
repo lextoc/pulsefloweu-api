@@ -6,15 +6,31 @@ class ApplicationController < ActionController::API
 
   protect_from_forgery unless: -> { request.format.json? }
 
+  class InvalidObject < StandardError; end
+
   private
 
   rescue_from CanCan::AccessDenied do |exception|
+    handle_exception(exception, 403, 'You are not authorized')
+  end
+
+  rescue_from ActionController::ParameterMissing do |exception|
+    handle_exception(exception, 400, 'You made a bad request')
+  end
+
+  rescue_from InvalidObject do |exception|
+    handle_exception(exception, 400, 'You made a bad request')
+  end
+
+  def handle_exception(exception, status, message)
     puts ''
-    puts '----- ACCESS DENIED BY CANCAN -----'
     puts exception.inspect
-    puts '-----------------------------------'
     puts ''
-    render json: { success: false, errors: ['You are not authorized'] }.to_json, status: 403
+    render json: { success: false, errors: [message] }.to_json, status:
+  end
+
+  def validate_object(object)
+    raise InvalidObject unless object.valid?
   end
 
   def render_data(data)

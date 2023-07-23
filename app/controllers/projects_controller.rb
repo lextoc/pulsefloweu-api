@@ -13,11 +13,20 @@ class ProjectsController < ApplicationController
     render json: project
   end
 
+  def folders
+    folders = current_user.folders.where(project_id: params[:id]).page(params[:page])
+    folders.each { |folder| authorize! :read, folder }
+    ap folders
+    render_data json: folders
+  end
+
   def create
     # Create the project.
     project = current_user.projects.new(project_params)
     project.user = current_user
     authorize! :create, project
+
+    validate_object(project)
 
     # Also create the project user relation.
     if project.save

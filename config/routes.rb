@@ -3,8 +3,12 @@ Rails.application.routes.draw do
 
   resources :projects
   # resources :projects_users
+  get 'projects/:id/folders', to: 'projects#folders'
+
   resources :folders
   # resources :folders_users
+
   resources :tasks
+
   resources :timesheets
 end
