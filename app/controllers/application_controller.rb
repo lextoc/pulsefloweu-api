@@ -8,6 +8,15 @@ class ApplicationController < ActionController::API
 
   private
 
+  rescue_from CanCan::AccessDenied do |exception|
+    puts ''
+    puts '----- ACCESS DENIED BY CANCAN -----'
+    puts exception.inspect
+    puts '-----------------------------------'
+    puts ''
+    render json: { success: false, errors: ['You are not authorized'] }.to_json, status: 403
+  end
+
   def render_data(data)
     render json: {
       data:,

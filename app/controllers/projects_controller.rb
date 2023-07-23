@@ -3,7 +3,7 @@ class ProjectsController < ApplicationController
 
   def index
     projects = current_user.projects.all.page(params[:page])
-    authorize! :read, projects
+    projects.each { |project| authorize! :read, project }
     render_data projects
   end
 
