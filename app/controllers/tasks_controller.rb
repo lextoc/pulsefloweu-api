@@ -3,23 +3,23 @@ class TasksController < ApplicationController
 
   def index
     tasks = current_user.tasks.page(params[:page] || 1)
-    render_data tasks
+    render_data(tasks)
   end
 
   def show
     task = current_user.tasks.find(params[:id])
-    render json: task
+    render(json: task)
   end
 
   def create
     task = current_user.tasks.create(task_params)
-    render json: task
+    render(json: task)
   end
 
   def update
     task = current_user.tasks.find(params[:id])
     task.update(task_params)
-    render json: task
+    render(json: task)
   end
 
   def destroy

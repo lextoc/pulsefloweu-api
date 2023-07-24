@@ -3,17 +3,17 @@ class TimesheetsController < ApplicationController
 
   def index
     timesheets = current_user.timesheets.page(params[:page] || 1)
-    render_data timesheets
+    render_data(timesheets)
   end
 
   def show
     timesheet = current_user.timesheets.find(params[:id])
-    render json: timesheet
+    render(json: timesheet)
   end
 
   def create
     timesheet = current_user.timesheets.create(timesheet_params)
-    render json: timesheet
+    render(json: timesheet)
   end
 
   def update
@@ -21,7 +21,7 @@ class TimesheetsController < ApplicationController
 
     timesheet = current_user.timesheets.find(params[:id])
     timesheet.update(timesheet_params)
-    render json: timesheet
+    render(json: timesheet)
   end
 
   def destroy

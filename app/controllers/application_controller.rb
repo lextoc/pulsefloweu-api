@@ -23,21 +23,22 @@ class ApplicationController < ActionController::API
   end
 
   def handle_exception(exception, status, message)
-    puts ''
-    puts exception.inspect
-    puts ''
-    render json: { success: false, errors: [message] }.to_json, status:
+    puts('')
+    puts(exception.inspect)
+    puts('')
+    render(json: { success: false, errors: [message] }.to_json, status:)
   end
 
   def validate_object(object)
-    raise InvalidObject unless object.valid?
+    raise(InvalidObject) unless object.valid?
   end
 
   def render_data(data)
-    render json: {
+    render(json: {
+      success: true,
       data:,
       meta: pagination_info(data)
-    }.to_json
+    }.to_json)
   end
 
   def pagination_info(data)

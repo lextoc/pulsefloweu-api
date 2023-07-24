@@ -11,13 +11,13 @@ module FolderAbility
   private
 
   def folder_read_abilities(user)
-    can :read, Folder do |folder|
+    can(:read, Folder) do |folder|
       folder.user == user
     end
   end
 
   def folder_create_abilities(user)
-    can :create, Folder do |folder|
+    can(:create, Folder) do |folder|
       folder.user == user &&
         # Can only create folders in projects that belong to the user.
         folder.project.user == user
@@ -25,7 +25,7 @@ module FolderAbility
   end
 
   def folder_update_abilities(user)
-    can :update, Folder do |folder|
+    can(:update, Folder) do |folder|
       folder.user == user &&
         # Can only update folders to projects that belong to the user.
         folder.project.user == user
@@ -33,7 +33,7 @@ module FolderAbility
   end
 
   def folder_destroy_abilities(user)
-    can :destroy, Folder do |folder|
+    can(:destroy, Folder) do |folder|
       folder.user == user
     end
   end

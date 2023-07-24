@@ -3,23 +3,27 @@ class FoldersController < ApplicationController
 
   def index
     folders = current_user.folders.all.page(params[:page] || 1)
-    render_data folders
+    render_data(folders)
   end
 
   def show
     folder = current_user.folders.find(params[:id])
-    render json: folder
+    render(json: folder)
   end
 
   def create
-    folder = current_user.folders.create(folder_params)
-    render json: folder
+    folder = current_user.folders.new(folder_params)
+    folder.user = current_user
+    ap(folder)
+    validate_object(folder)
+    folder.save
+    render(json: folder)
   end
 
   def update
     folder = current_user.folders.find(params[:id])
     folder.update(folder_params)
-    render json: folder
+    render(json: folder)
   end
 
   def destroy

@@ -11,13 +11,13 @@ module TimesheetAbility
   private
 
   def timesheet_read_abilities(user)
-    can :read, Timesheet do |timesheet|
+    can(:read, Timesheet) do |timesheet|
       timesheet.user == user
     end
   end
 
   def timesheet_create_abilities(user)
-    can :create, Timesheet do |timesheet|
+    can(:create, Timesheet) do |timesheet|
       timesheet.user == user &&
         # Can only create timesheets in tasks that belong to the user.
         timesheet.task.user == user
@@ -25,7 +25,7 @@ module TimesheetAbility
   end
 
   def timesheet_update_abilities(user)
-    can :update, Timesheet do |timesheet|
+    can(:update, Timesheet) do |timesheet|
       timesheet.user == user &&
         # Can only update timesheets to tasks that belong to the user.
         timesheet.task.user == user
@@ -33,7 +33,7 @@ module TimesheetAbility
   end
 
   def timesheet_destroy_abilities(user)
-    can :destroy, Timesheet do |timesheet|
+    can(:destroy, Timesheet) do |timesheet|
       timesheet.user == user
     end
   end

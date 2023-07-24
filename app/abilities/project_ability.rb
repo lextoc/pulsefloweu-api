@@ -11,25 +11,25 @@ module ProjectAbility
   private
 
   def project_read_abilities(user)
-    can :read, Project do |project|
+    can(:read, Project) do |project|
       project.user == user
     end
   end
 
   def project_create_abilities(user)
-    can :create, Project do |project|
+    can(:create, Project) do |project|
       project.user == user
     end
   end
 
   def project_update_abilities(user)
-    can :update, Project do |project|
+    can(:update, Project) do |project|
       project.user == user
     end
   end
 
   def project_destroy_abilities(user)
-    can :destroy, Project do |project|
+    can(:destroy, Project) do |project|
       project.user == user
     end
   end

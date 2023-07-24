@@ -11,14 +11,14 @@ module ProjectUserAbility
   private
 
   def project_user_read_abilities(user)
-    can :read, ProjectUser do |project_user|
+    can(:read, ProjectUser) do |project_user|
       # Creator or user must be the current user.
       project_user.creator == user || project_user.user == user
     end
   end
 
   def project_user_create_abilities(user)
-    can :create, ProjectUser do |project_user|
+    can(:create, ProjectUser) do |project_user|
       # Creator must be the current user.
       project_user.creator == user &&
         # Project must be owned by the current user OR is admin.
@@ -28,7 +28,7 @@ module ProjectUserAbility
   end
 
   def project_user_update_abilities(user)
-    can :update, ProjectUser do |project_user|
+    can(:update, ProjectUser) do |project_user|
       # Creator must be the current user.
       project_user.creator == user &&
         # Project must be owned by the current user OR is admin.
@@ -38,7 +38,7 @@ module ProjectUserAbility
   end
 
   def project_user_destroy_abilities(user)
-    can :destroy, ProjectUser do |project_user|
+    can(:destroy, ProjectUser) do |project_user|
       # Creator must be the current user.
       project_user.creator == user &&
         # Project must be owned by the current user OR is admin.

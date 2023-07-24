@@ -11,13 +11,13 @@ module TaskAbility
   private
 
   def task_read_abilities(user)
-    can :read, Task do |task|
+    can(:read, Task) do |task|
       task.user == user
     end
   end
 
   def task_create_abilities(user)
-    can :create, Task do |task|
+    can(:create, Task) do |task|
       task.user == user &&
         # Can only create tasks in folders that belong to the user.
         task.folder.user == user
@@ -25,7 +25,7 @@ module TaskAbility
   end
 
   def task_update_abilities(user)
-    can :update, Task do |task|
+    can(:update, Task) do |task|
       task.user == user &&
         # Can only update tasks to folders that belong to the user.
         task.folder.user == user
@@ -33,7 +33,7 @@ module TaskAbility
   end
 
   def task_destroy_abilities(user)
-    can :destroy, Task do |task|
+    can(:destroy, Task) do |task|
       task.user == user
     end
   end
