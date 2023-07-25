@@ -3,6 +3,7 @@ class FoldersController < ApplicationController
 
   def index
     folders = current_user.folders.all.page(params[:page] || 1)
+    folders.each { |folder| authorize!(:read, folder) }
     render_data(folders)
   end
 
@@ -13,21 +14,41 @@ class FoldersController < ApplicationController
   end
 
   def create
+    # Create the folder.
     folder = current_user.folders.new(folder_params)
     folder.user = current_user
+    authorize!(:create, folder)
+
     validate_object(folder)
+
+    # Also create the folder user relation.
+    if folder.save
+      folder_user = folder.folder_users.new(user: current_user, creator: current_user, role: :admin)
+      authorize!(:create, folder_user)
+      folder.save
+    end
+
     folder.save
     render(json: folder)
   end
 
   def update
     folder = current_user.folders.find(params[:id])
+    authorize!(:update, folder)
     folder.update(folder_params)
     render(json: folder)
   end
 
   def destroy
-    current_user.folders.destroy(params[:id])
+    folder = current_user.folders.find_by(id: params[:id])
+
+    if folder.nil?
+      render(json: { success: false, errors: ['Folder not found'] }.to_json, status: 404)
+      return
+    end
+
+    authorize!(:destroy, folder)
+    folder.destroy
   end
 
   private

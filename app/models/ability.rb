@@ -6,6 +6,7 @@ class Ability
   include ProjectAbility
   include ProjectUserAbility
   include FolderAbility
+  include FolderUserAbility
   include TaskAbility
   include TimesheetAbility
 
@@ -14,7 +15,10 @@ class Ability
 
     project_abilities(user)
     project_user_abilities(user)
+
     folder_abilities(user)
+    folder_user_abilities(user)
+
     task_abilities(user)
     timesheet_abilities(user)
   end
