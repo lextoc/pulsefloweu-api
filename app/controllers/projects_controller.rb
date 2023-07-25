@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
   def show
     project = current_user.projects.find(params[:id])
     authorize!(:read, project)
-    render(json: project)
+    render(json: { success: true, data: project }.to_json)
   end
 
   def folders

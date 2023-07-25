@@ -8,13 +8,13 @@ class FoldersController < ApplicationController
 
   def show
     folder = current_user.folders.find(params[:id])
-    render(json: folder)
+    authorize!(:read, folder)
+    render(json: { success: true, data: folder }.to_json)
   end
 
   def create
     folder = current_user.folders.new(folder_params)
     folder.user = current_user
-    ap(folder)
     validate_object(folder)
     folder.save
     render(json: folder)
