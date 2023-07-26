@@ -11,6 +11,9 @@ Rails.application.routes.draw do
 
   resources :tasks
   # resources :tasks_users
+  get 'tasks/:id/timesheets', to: 'tasks#timesheets'
 
   resources :timesheets
+
+  post 'misc/stop/all', to: 'timesheets#stop'
 end

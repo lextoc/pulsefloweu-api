@@ -9,7 +9,6 @@ class User < ApplicationRecord
   has_many :project_users, dependent: :destroy
   has_many :projects, through: :project_users # TODO: handle deletion
 
-  # TODO: implement folder memberships logic
   has_many :folder_users, dependent: :destroy
   has_many :folders_via_membership, through: :folder_users # TODO: handle deletion
 

@@ -13,6 +13,16 @@ class TasksController < ApplicationController
     render(json: task)
   end
 
+  def timesheets
+    timesheets = if params[:active]
+                   current_user.timesheets.where(task_id: params[:id]).where(end_date: nil).page(params[:page] || 1)
+                 else
+                   current_user.timesheets.where(task_id: params[:id]).page(params[:page] || 1)
+                 end
+    timesheets.each { |timesheet| authorize!(:read, timesheet) }
+    render_data(timesheets)
+  end
+
   def create
     task = current_user.tasks.new(task_params)
     task.user = current_user
