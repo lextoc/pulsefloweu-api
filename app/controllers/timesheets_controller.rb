@@ -39,6 +39,6 @@ class TimesheetsController < ApplicationController
   end
 
   def timesheet_params
-    params.require(:timesheet).permit(:start_date, :duration, :task_id)
+    params.require(:timesheet).permit(:start_date, :end_date, :task_id)
   end
 end
