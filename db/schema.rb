@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_26_161940) do
 
   create_table "timesheets", force: :cascade do |t|
     t.datetime "start_date"
-    t.integer "duration"
+    t.datetime "end_date"
     t.bigint "user_id", null: false
     t.bigint "task_id", null: false
     t.bigint "folder_id", null: false

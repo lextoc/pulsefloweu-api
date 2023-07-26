@@ -11,6 +11,11 @@ class TimesheetsController < ApplicationController
     render(json: timesheet)
   end
 
+  def active
+    timesheet = current_user.timesheets.where(end_date: nil)
+    render(json: timesheet)
+  end
+
   def create
     timesheet = current_user.timesheets.create(timesheet_params)
     render(json: timesheet)
