@@ -13,4 +13,5 @@ Rails.application.routes.draw do
   # resources :tasks_users
 
   resources :timesheets
+  get 'timesheets/active', to: 'timesheets#active'
 end
