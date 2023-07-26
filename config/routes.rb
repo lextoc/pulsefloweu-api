@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   resources :folders
   # resources :folders_users
+  get 'folders/:id/tasks', to: 'folders#tasks'
 
   resources :tasks
   # resources :tasks_users

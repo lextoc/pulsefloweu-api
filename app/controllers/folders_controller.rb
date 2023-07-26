@@ -13,6 +13,12 @@ class FoldersController < ApplicationController
     render(json: { success: true, data: folder }.to_json)
   end
 
+  def tasks
+    tasks = current_user.tasks.where(folder_id: params[:id]).page(params[:page])
+    tasks.each { |task| authorize!(:read, task) }
+    render_data(tasks)
+  end
+
   def create
     folder = current_user.folders.new(folder_params)
     folder.user = current_user
