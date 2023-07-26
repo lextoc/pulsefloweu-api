@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   # resources :folders_users
 
   resources :tasks
+  # resources :tasks_users
 
   resources :timesheets
 end
