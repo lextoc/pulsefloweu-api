@@ -2,17 +2,16 @@ class TimesheetsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    timesheets = current_user.timesheets.page(params[:page] || 1)
+    timesheets = if params[:active]
+                   current_user.timesheets.where(end_date: nil).page(params[:page] || 1)
+                 else
+                   current_user.timesheets.page(params[:page] || 1)
+                 end
     render_data(timesheets)
   end
 
   def show
     timesheet = current_user.timesheets.find(params[:id])
-    render(json: timesheet)
-  end
-
-  def active
-    timesheet = current_user.timesheets.where(end_date: nil)
     render(json: timesheet)
   end
 
