@@ -1,29 +1,51 @@
-class TasksController < ApplicationController
+lass TasksController < ApplicationController
   before_action :authenticate_user!
 
   def index
     tasks = current_user.tasks.page(params[:page] || 1)
+    tasks.each { |task| authorize!(:read, task) }
     render_data(tasks)
   end
 
   def show
     task = current_user.tasks.find(params[:id])
+    authorize!(:read, task)
     render(json: task)
   end
 
   def create
-    task = current_user.tasks.create(task_params)
+    task = current_user.tasks.new(task_params)
+    task.user = current_user
+    authorize!(:create, task)
+
+    validate_object(task)
+
+    if task.save
+      task_user = task.task_users.new(user: current_user, creator: current_user, role: :admin)
+      authorize!(:create, task_user)
+      task_user.save
+    end
+
     render(json: task)
   end
 
   def update
     task = current_user.tasks.find(params[:id])
+    authorize!(:update, task)
     task.update(task_params)
     render(json: task)
   end
 
   def destroy
-    current_user.tasks.destroy(params[:id])
+    task = current_user.tasks.find_by(id: params[:id])
+
+    if task.nil?
+      render(json: { success: false, errors: ['Task not found'] }.to_json, status: 404)
+      return
+    end
+
+    authorize!(:destroy, task)
+    task.destroy
   end
 
   private

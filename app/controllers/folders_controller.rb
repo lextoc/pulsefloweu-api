@@ -14,21 +14,18 @@ class FoldersController < ApplicationController
   end
 
   def create
-    # Create the folder.
     folder = current_user.folders.new(folder_params)
     folder.user = current_user
     authorize!(:create, folder)
 
     validate_object(folder)
 
-    # Also create the folder user relation.
     if folder.save
       folder_user = folder.folder_users.new(user: current_user, creator: current_user, role: :admin)
       authorize!(:create, folder_user)
-      folder.save
+      folder_user.save
     end
 
-    folder.save
     render(json: folder)
   end
 

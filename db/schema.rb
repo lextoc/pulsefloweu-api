@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_21_073201) do
+ActiveRecord::Schema[7.0].define(version: 2023_07_26_161940) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,6 +29,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_21_073201) do
     t.bigint "user_id", null: false
     t.bigint "creator_id", null: false
     t.integer "role"
+    t.decimal "price", precision: 12, scale: 2
     t.boolean "can_view_others_tasks", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -48,6 +49,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_21_073201) do
     t.bigint "user_id", null: false
     t.bigint "creator_id", null: false
     t.integer "role"
+    t.decimal "price", precision: 12, scale: 2
     t.boolean "can_view_others_tasks", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -62,6 +64,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_21_073201) do
     t.datetime "updated_at", null: false
     t.index ["folder_id"], name: "index_tasks_on_folder_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
+  end
+
+  create_table "tasks_users", id: false, force: :cascade do |t|
+    t.bigint "task_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "creator_id", null: false
+    t.integer "role"
+    t.decimal "price", precision: 12, scale: 2
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creator_id"], name: "index_tasks_users_on_creator_id"
   end
 
   create_table "timesheets", force: :cascade do |t|
@@ -118,6 +131,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_21_073201) do
   add_foreign_key "projects_users", "users", column: "creator_id"
   add_foreign_key "tasks", "folders"
   add_foreign_key "tasks", "users"
+  add_foreign_key "tasks_users", "users", column: "creator_id"
   add_foreign_key "timesheets", "folders"
   add_foreign_key "timesheets", "tasks"
   add_foreign_key "timesheets", "users"
