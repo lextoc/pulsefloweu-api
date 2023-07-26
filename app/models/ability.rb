@@ -5,9 +5,13 @@ class Ability
 
   include ProjectAbility
   include ProjectUserAbility
+
   include FolderAbility
   include FolderUserAbility
+
   include TaskAbility
+  include TaskUserAbility
+
   include TimesheetAbility
 
   def initialize(user)
@@ -20,6 +24,8 @@ class Ability
     folder_user_abilities(user)
 
     task_abilities(user)
+    task_user_abilities(user)
+
     timesheet_abilities(user)
   end
 end
