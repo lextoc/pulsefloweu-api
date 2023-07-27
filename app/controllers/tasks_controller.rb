@@ -14,11 +14,7 @@ class TasksController < ApplicationController
   end
 
   def timesheets
-    timesheets = if params[:active]
-                   current_user.timesheets.where(task_id: params[:id]).where(end_date: nil).page(params[:page] || 1)
-                 else
-                   current_user.timesheets.where(task_id: params[:id]).page(params[:page] || 1)
-                 end
+    timesheets = params[:active] ? active_timesheets : all_timesheets
     timesheets.each { |timesheet| authorize!(:read, timesheet) }
     render_data(timesheets)
   end
@@ -62,5 +58,13 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:name, :project_id, :folder_id)
+  end
+
+  def active_timesheets
+    current_user.timesheets.where(task_id: params[:id]).where(end_date: nil).page(params[:page] || 1)
+  end
+
+  def all_timesheets
+    current_user.timesheets.where(task_id: params[:id]).page(params[:page] || 1)
   end
 end
