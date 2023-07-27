@@ -16,10 +16,6 @@ class TasksController < ApplicationController
   def timesheets
     timesheets = params[:active] ? active_timesheets : all_timesheets
     timesheets.each { |timesheet| authorize!(:read, timesheet) }
-    if params[:total_duration]
-      render(json: total_duration_of_timesheets)
-      return
-    end
     render_data(timesheets)
   end
 
@@ -70,14 +66,5 @@ class TasksController < ApplicationController
 
   def all_timesheets
     current_user.timesheets.where(task_id: params[:id])
-  end
-
-  def total_duration_of_timesheets
-    duration = 0
-    all_timesheets.each do |timesheet|
-      duration += ((timesheet.end_date.nil? ? Time.now.getutc.to_f : timesheet.end_date.to_f) -
-        timesheet.start_date.to_f).to_i
-    end
-    duration
   end
 end

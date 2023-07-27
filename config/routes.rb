@@ -16,4 +16,8 @@ Rails.application.routes.draw do
   resources :timesheets
 
   post 'misc/stop/all', to: 'timesheets#stop'
+
+  namespace :misc do
+    get 'tasks/:id/total_duration_of_timesheets', to: 'tasks#total_duration_of_timesheets'
+  end
 end
