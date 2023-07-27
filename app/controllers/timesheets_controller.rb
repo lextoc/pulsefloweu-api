@@ -2,11 +2,7 @@ class TimesheetsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    timesheets = if params[:active]
-                   current_user.timesheets.where(end_date: nil).page(params[:page] || 1)
-                 else
-                   current_user.timesheets.page(params[:page] || 1)
-                 end
+    timesheets = params[:active] ? active_timesheets : all_timesheets
     render_data(timesheets)
   end
 
@@ -45,5 +41,13 @@ class TimesheetsController < ApplicationController
 
   def timesheet_params
     params.require(:timesheet).permit(:start_date, :end_date, :task_id, :folder_id)
+  end
+
+  def active_timesheets
+    current_user.timesheets.where(end_date: nil)
+  end
+
+  def all_timesheets
+    current_user.timesheets
   end
 end
