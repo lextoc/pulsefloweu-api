@@ -25,33 +25,29 @@ class ProjectsController < ApplicationController
     authorize!(:create, project)
 
     validate_object(project)
+    project.save
 
-    if project.save
-      project_user = project.project_users.new(user: current_user, creator: current_user, role: :admin)
-      authorize!(:create, project_user)
-      project_user.save
-    end
-
-    render(json: project)
+    render(json: { success: true, data: project }.to_json)
   end
 
   def update
     project = current_user.projects.find(params[:id])
     authorize!(:update, project)
-    project.update(project_params)
-    render(json: project)
+
+    project.assign_attributes(project_params)
+    authorize!(:update, project)
+
+    validate_object(project)
+    project.save
+
+    render(json: { success: true, data: project }.to_json)
   end
 
   def destroy
     project = current_user.projects.find_by(id: params[:id])
-
-    if project.nil?
-      render(json: { success: false, errors: ['Project not found'] }.to_json, status: 404)
-      return
-    end
-
     authorize!(:destroy, project)
     project.destroy
+    render(json: { success: true }.to_json)
   end
 
   private

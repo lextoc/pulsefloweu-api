@@ -25,33 +25,29 @@ class FoldersController < ApplicationController
     authorize!(:create, folder)
 
     validate_object(folder)
+    folder.save
 
-    if folder.save
-      folder_user = folder.folder_users.new(user: current_user, creator: current_user, role: :admin)
-      authorize!(:create, folder_user)
-      folder_user.save
-    end
-
-    render(json: folder)
+    render(json: { success: true, data: folder }.to_json)
   end
 
   def update
     folder = current_user.folders.find(params[:id])
     authorize!(:update, folder)
-    folder.update(folder_params)
-    render(json: folder)
+
+    folder.assign_attributes(folder_params)
+    authorize!(:update, folder)
+
+    validate_object(folder)
+    folder.save
+
+    render(json: { success: true, data: folder }.to_json)
   end
 
   def destroy
     folder = current_user.folders.find_by(id: params[:id])
-
-    if folder.nil?
-      render(json: { success: false, errors: ['Folder not found'] }.to_json, status: 404)
-      return
-    end
-
     authorize!(:destroy, folder)
     folder.destroy
+    render(json: { success: true }.to_json)
   end
 
   private

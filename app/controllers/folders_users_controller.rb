@@ -1,2 +1,0 @@
-class FoldersUsersController < ApplicationController
-end

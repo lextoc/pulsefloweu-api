@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    tasks = current_user.tasks.page(params[:page] || 1)
+    tasks = current_user.tasks.all.page(params[:page] || 1)
     tasks.each { |task| authorize!(:read, task) }
     render_data(tasks)
   end
@@ -10,7 +10,7 @@ class TasksController < ApplicationController
   def show
     task = current_user.tasks.find(params[:id])
     authorize!(:read, task)
-    render(json: task)
+    render(json: { success: true, data: task }.to_json)
   end
 
   def timesheets
@@ -25,33 +25,29 @@ class TasksController < ApplicationController
     authorize!(:create, task)
 
     validate_object(task)
+    task.save
 
-    if task.save
-      task_user = task.task_users.new(user: current_user, creator: current_user, role: :admin)
-      authorize!(:create, task_user)
-      task_user.save
-    end
-
-    render(json: task)
+    render(json: { success: true, data: task }.to_json)
   end
 
   def update
     task = current_user.tasks.find(params[:id])
     authorize!(:update, task)
-    task.update(task_params)
-    render(json: task)
+
+    task.assign_attributes(task_params)
+    authorize!(:update, task)
+
+    validate_object(task)
+    task.save
+
+    render(json: { success: true, data: task }.to_json)
   end
 
   def destroy
     task = current_user.tasks.find_by(id: params[:id])
-
-    if task.nil?
-      render(json: { success: false, errors: ['Task not found'] }.to_json, status: 404)
-      return
-    end
-
     authorize!(:destroy, task)
     task.destroy
+    render(json: { success: true }.to_json)
   end
 
   private

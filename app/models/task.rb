@@ -4,8 +4,6 @@ class Task < ApplicationRecord
   belongs_to :user
   belongs_to :folder
 
-  has_many :task_users, dependent: :delete_all
-  has_many :users, through: :task_users
   has_many :timesheets, dependent: :delete_all
 
   validates_length_of :name, minimum: 1, maximum: 100, allow_blank: false

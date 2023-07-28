@@ -6,16 +6,8 @@ class User < ApplicationRecord
          :omniauthable
   include DeviseTokenAuth::Concerns::User
 
-  has_many :project_users, dependent: :destroy
-  has_many :projects, through: :project_users # TODO: handle deletion
-
-  has_many :folder_users, dependent: :destroy
-  has_many :folders_via_membership, through: :folder_users # TODO: handle deletion
-
+  has_many :projects, dependent: :destroy
+  has_many :folders, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_many :timesheets, dependent: :destroy
-
-  def folders
-    Folder.where(user: self).or(Folder.where(project: projects))
-  end
 end
