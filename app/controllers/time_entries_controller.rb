@@ -13,21 +13,6 @@ class TimeEntriesController < ApplicationController
     render(json: { success: true, data: time_entry }.to_json)
   end
 
-  def stop
-    time_entries = current_user.time_entries.where(end_date: nil)
-
-    time_entries.each do |time_entry|
-      authorize!(:update, time_entry)
-
-      time_entry.assign_attributes(end_date: Time.now.utc)
-      authorize!(:update, time_entry)
-
-      time_entry.save
-    end
-
-    render(json: { success: true, data: time_entries }.to_json)
-  end
-
   def create
     time_entry = current_user.time_entries.new(time_entry_params)
     time_entry.user = current_user
