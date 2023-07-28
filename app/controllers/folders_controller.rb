@@ -15,8 +15,19 @@ class FoldersController < ApplicationController
 
   def tasks
     tasks = current_user.tasks.where(folder_id: params[:id]).page(params[:page])
-    tasks.each { |task| authorize!(:read, task) }
-    render_data(tasks)
+    # tasks.each { |task| authorize!(:read, task) }
+    # render_data(tasks)
+
+    # TODO add pagination to this functionality and refactor it/clean it up
+    arr = []
+    tasks.each do |task|
+      authorize!(:read, task)
+
+      new_field = { 'total_duration_of_time_entries' => task.total_duration_of_time_entries }
+      arr << JSON.parse(task.to_json).merge(new_field)
+    end
+
+    render(json: { success: true, data: arr }.to_json)
   end
 
   def create

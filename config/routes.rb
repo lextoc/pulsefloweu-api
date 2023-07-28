@@ -18,6 +18,6 @@ Rails.application.routes.draw do
   post 'misc/stop/all', to: 'time_entries#stop'
 
   namespace :misc do
-    get 'tasks/:id/total_duration_of_time_entries', to: 'tasks#total_duration_of_time_entries'
+    # get 'tasks/:id/total_duration_of_time_entries', to: 'tasks#total_duration_of_time_entries'
   end
 end
