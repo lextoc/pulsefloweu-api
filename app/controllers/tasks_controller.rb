@@ -13,10 +13,10 @@ class TasksController < ApplicationController
     render(json: { success: true, data: task }.to_json)
   end
 
-  def timesheets
-    timesheets = params[:active] ? active_timesheets : all_timesheets
-    timesheets.each { |timesheet| authorize!(:read, timesheet) }
-    render_data(timesheets)
+  def time_entries
+    time_entries = params[:active] ? active_time_entries : all_time_entries
+    time_entries.each { |time_entry| authorize!(:read, time_entry) }
+    render_data(time_entries)
   end
 
   def create
@@ -56,11 +56,11 @@ class TasksController < ApplicationController
     params.require(:task).permit(:name, :project_id, :folder_id)
   end
 
-  def active_timesheets
-    current_user.timesheets.where(task_id: params[:id]).where(end_date: nil)
+  def active_time_entries
+    current_user.time_entries.where(task_id: params[:id]).where(end_date: nil)
   end
 
-  def all_timesheets
-    current_user.timesheets.where(task_id: params[:id])
+  def all_time_entries
+    current_user.time_entries.where(task_id: params[:id])
   end
 end

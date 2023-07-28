@@ -4,7 +4,7 @@ class Task < ApplicationRecord
   belongs_to :user
   belongs_to :folder
 
-  has_many :timesheets, dependent: :delete_all
+  has_many :time_entries, dependent: :delete_all
 
   validates_length_of :name, minimum: 1, maximum: 100, allow_blank: false
   validates :user, presence: true

@@ -11,13 +11,13 @@ Rails.application.routes.draw do
 
   resources :tasks
   # resources :tasks_users
-  get 'tasks/:id/timesheets', to: 'tasks#timesheets'
+  get 'tasks/:id/time_entries', to: 'tasks#time_entries'
 
-  resources :timesheets
+  resources :time_entries
 
-  post 'misc/stop/all', to: 'timesheets#stop'
+  post 'misc/stop/all', to: 'time_entries#stop'
 
   namespace :misc do
-    get 'tasks/:id/total_duration_of_timesheets', to: 'tasks#total_duration_of_timesheets'
+    get 'tasks/:id/total_duration_of_time_entries', to: 'tasks#total_duration_of_time_entries'
   end
 end

@@ -1,4 +1,4 @@
-class Timesheet < ApplicationRecord
+class TimeEntry < ApplicationRecord
   default_scope { order(start_date: :desc) }
 
   belongs_to :user

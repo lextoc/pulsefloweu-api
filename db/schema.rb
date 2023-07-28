@@ -42,7 +42,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_203221) do
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
-  create_table "timesheets", force: :cascade do |t|
+  create_table "time_entries", force: :cascade do |t|
     t.datetime "start_date"
     t.datetime "end_date"
     t.bigint "user_id", null: false
@@ -50,9 +50,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_203221) do
     t.bigint "folder_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["folder_id"], name: "index_timesheets_on_folder_id"
-    t.index ["task_id"], name: "index_timesheets_on_task_id"
-    t.index ["user_id"], name: "index_timesheets_on_user_id"
+    t.index ["folder_id"], name: "index_time_entries_on_folder_id"
+    t.index ["task_id"], name: "index_time_entries_on_task_id"
+    t.index ["user_id"], name: "index_time_entries_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -94,7 +94,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_18_203221) do
   add_foreign_key "projects", "users"
   add_foreign_key "tasks", "folders"
   add_foreign_key "tasks", "users"
-  add_foreign_key "timesheets", "folders"
-  add_foreign_key "timesheets", "tasks"
-  add_foreign_key "timesheets", "users"
+  add_foreign_key "time_entries", "folders"
+  add_foreign_key "time_entries", "tasks"
+  add_foreign_key "time_entries", "users"
 end

@@ -6,7 +6,7 @@ class Ability
   include ProjectAbility
   include FolderAbility
   include TaskAbility
-  include TimesheetAbility
+  include TimeEntryAbility
 
   def initialize(user)
     return unless user.present?
@@ -14,6 +14,6 @@ class Ability
     project_abilities(user)
     folder_abilities(user)
     task_abilities(user)
-    timesheet_abilities(user)
+    time_entry_abilities(user)
   end
 end

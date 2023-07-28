@@ -1,24 +1,24 @@
 class Misc::TasksController < ApplicationController
   before_action :authenticate_user!
 
-  def total_duration_of_timesheets
-    timesheets = all_timesheets
-    timesheets.each { |timesheet| authorize!(:read, timesheet) }
-    render(json: get_total_duration_of_timesheets(timesheets))
+  def total_duration_of_time_entries
+    time_entries = all_time_entries
+    time_entries.each { |time_entry| authorize!(:read, time_entry) }
+    render(json: get_total_duration_of_time_entries(time_entries))
   end
 
   private
 
-  def get_total_duration_of_timesheets(timesheets)
+  def get_total_duration_of_time_entries(time_entries)
     duration = 0
-    timesheets.each do |timesheet|
-      duration += ((timesheet.end_date.nil? ? Time.now.getutc.to_f : timesheet.end_date.to_f) -
-        timesheet.start_date.to_f).to_i
+    time_entries.each do |time_entry|
+      duration += ((time_entry.end_date.nil? ? Time.now.getutc.to_f : time_entry.end_date.to_f) -
+        time_entry.start_date.to_f).to_i
     end
     duration
   end
 
-  def all_timesheets
-    current_user.timesheets.where(task_id: params[:id])
+  def all_time_entries
+    current_user.time_entries.where(task_id: params[:id])
   end
 end

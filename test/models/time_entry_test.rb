@@ -1,6 +1,6 @@
 require "test_helper"
 
-class TimesheetTest < ActiveSupport::TestCase
+class TimeEntryTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -9,5 +9,5 @@ class User < ApplicationRecord
   has_many :projects, dependent: :destroy
   has_many :folders, dependent: :destroy
   has_many :tasks, dependent: :destroy
-  has_many :timesheets, dependent: :destroy
+  has_many :time_entries, dependent: :destroy
 end
