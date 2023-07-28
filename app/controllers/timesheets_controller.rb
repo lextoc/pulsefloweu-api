@@ -3,16 +3,19 @@ class TimesheetsController < ApplicationController
 
   def index
     timesheets = params[:active] ? active_timesheets : all_timesheets
+    timesheets.each { |timesheet| authorize!(:read, timesheet) }
     render_data(timesheets)
   end
 
   def show
     timesheet = current_user.timesheets.find(params[:id])
-    render(json: timesheet)
+    authorize!(:read, timesheet)
+    render(json: { success: true, data: timesheet }.to_json)
   end
 
   def stop
     timesheets = current_user.timesheets.where(end_date: nil).update_all(end_date: Time.now.utc)
+    timesheets.each { |timesheet| authorize!(:update, timesheet) }
     render(json: timesheets)
   end
 
@@ -22,19 +25,29 @@ class TimesheetsController < ApplicationController
     authorize!(:create, timesheet)
 
     validate_object(timesheet)
-
     timesheet.save
-    render(json: timesheet)
+
+    render(json: { success: true, data: timesheet }.to_json)
   end
 
   def update
     timesheet = current_user.timesheets.find(params[:id])
-    timesheet.update(timesheet_params)
-    render(json: timesheet)
+    authorize!(:update, timesheet)
+
+    timesheet.assign_attributes(timesheet_params)
+    authorize!(:update, timesheet)
+
+    validate_object(timesheet)
+    timesheet.save
+
+    render(json: { success: true, data: timesheet }.to_json)
   end
 
   def destroy
-    current_user.timesheets.destroy(params[:id])
+    timesheet = current_user.timesheet.find_by(id: params[:id])
+    authorize!(:destroy, timesheet)
+    timesheet.destroy
+    render(json: { success: true }.to_json)
   end
 
   private
