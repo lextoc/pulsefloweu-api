@@ -3,8 +3,19 @@ class TimeEntriesController < ApplicationController
 
   def index
     time_entries = params[:active] ? active_time_entries : all_time_entries
-    time_entries.each { |time_entry| authorize!(:read, time_entry) }
-    render_data(time_entries)
+    # time_entries.each { |time_entry| authorize!(:read, time_entry) }
+    # render_data(time_entries)
+    arr = []
+    time_entries.each do |time_entry|
+      authorize!(:read, time_entry)
+
+      new_field = { 'task_name' => time_entry.task.name,
+                    'folder_name' => time_entry.folder.name,
+                    'project_name' => time_entry.folder.project.name }
+      arr << JSON.parse(time_entry.to_json).merge(new_field)
+    end
+
+    render(json: { success: true, data: arr, meta: pagination_info(time_entries) }.to_json)
   end
 
   def show

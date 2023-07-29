@@ -3,8 +3,17 @@ class TasksController < ApplicationController
 
   def index
     tasks = current_user.tasks.all.page(params[:page] || 1)
-    tasks.each { |task| authorize!(:read, task) }
-    render_data(tasks)
+    # tasks.each { |task| authorize!(:read, task) }
+    # render_data(tasks)
+    arr = []
+    tasks.each do |task|
+      authorize!(:read, task)
+
+      new_field = { 'folder_name' => task.folder.name, 'project_name' => task.folder.project.name }
+      arr << JSON.parse(task.to_json).merge(new_field)
+    end
+
+    render(json: { success: true, data: arr, meta: pagination_info(tasks) }.to_json)
   end
 
   def show
