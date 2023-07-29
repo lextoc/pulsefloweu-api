@@ -1,4 +1,6 @@
 class Project < ApplicationRecord
+  default_scope { order(created_at: :desc) }
+
   belongs_to :user # This is the owner.
 
   has_many :folders, dependent: :destroy

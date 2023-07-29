@@ -16,6 +16,9 @@ class Task < ApplicationRecord
       duration += ((time_entry.end_date.nil? ? Time.now.getutc.to_f : time_entry.end_date.to_f) -
         time_entry.start_date.to_f).to_i
     end
+    puts '------'
+    puts duration
+    puts '------'
     duration
   end
 end
