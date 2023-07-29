@@ -14,7 +14,7 @@ class ProjectsController < ApplicationController
   end
 
   def folders
-    folders = current_user.folders.where(project_id: params[:id]).page(params[:page])
+    folders = current_user.folders.where(project_id: params[:id]).page(params[:page] || 1)
     folders.each { |folder| authorize!(:read, folder) }
     render_data(folders)
   end

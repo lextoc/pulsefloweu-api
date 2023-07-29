@@ -37,7 +37,7 @@ class ApplicationController < ActionController::API
     render(json: {
       success: true,
       data:,
-      meta: data.method_defined?(:current_page) ? pagination_info(data) : {}
+      meta: pagination_info(data)
     }.to_json)
   end
 

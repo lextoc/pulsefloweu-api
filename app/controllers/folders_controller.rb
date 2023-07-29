@@ -14,7 +14,7 @@ class FoldersController < ApplicationController
   end
 
   def tasks
-    tasks = current_user.tasks.where(folder_id: params[:id]).page(params[:page])
+    tasks = current_user.tasks.where(folder_id: params[:id]).page(params[:page] || 1)
     # tasks.each { |task| authorize!(:read, task) }
     # render_data(tasks)
 
@@ -27,7 +27,7 @@ class FoldersController < ApplicationController
       arr << JSON.parse(task.to_json).merge(new_field)
     end
 
-    render(json: { success: true, data: arr }.to_json)
+    render(json: { success: true, data: arr, meta: pagination_info(tasks) }.to_json)
   end
 
   def create
