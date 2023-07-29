@@ -57,10 +57,10 @@ class TasksController < ApplicationController
   end
 
   def active_time_entries
-    current_user.time_entries.where(task_id: params[:id]).where(end_date: nil)
+    current_user.time_entries.where(task_id: params[:id]).where(end_date: nil).page(params[:page] || 1)
   end
 
   def all_time_entries
-    current_user.time_entries.where(task_id: params[:id])
+    current_user.time_entries.where(task_id: params[:id]).all.page(params[:page] || 1)
   end
 end

@@ -51,10 +51,10 @@ class TimeEntriesController < ApplicationController
   end
 
   def active_time_entries
-    current_user.time_entries.where(end_date: nil)
+    current_user.time_entries.where(end_date: nil).all.page(params[:page] || 1)
   end
 
   def all_time_entries
-    current_user.time_entries
+    current_user.time_entries.all.page(params[:page] || 1)
   end
 end
