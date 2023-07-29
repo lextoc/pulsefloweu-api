@@ -15,4 +15,18 @@ class Misc::TimeEntriesController < ApplicationController
 
     render(json: { success: true, data: time_entries }.to_json)
   end
+
+  def running_timers
+    time_entries = current_user.time_entries.where(end_date: nil).page(params[:page] || 1)
+
+    arr = []
+    time_entries.each do |time_entry|
+      authorize!(:read, time_entry)
+
+      new_field = { 'task_name' => time_entry.task.name }
+      arr << JSON.parse(time_entry.to_json).merge(new_field)
+    end
+
+    render(json: { success: true, data: arr, meta: pagination_info(time_entries) }.to_json)
+  end
 end

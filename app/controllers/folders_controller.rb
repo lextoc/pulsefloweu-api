@@ -18,7 +18,7 @@ class FoldersController < ApplicationController
     # tasks.each { |task| authorize!(:read, task) }
     # render_data(tasks)
 
-    # TODO: add pagination to this functionality and refactor it/clean it up
+    # TODO: refactor it/clean it up
     arr = []
     tasks.each do |task|
       authorize!(:read, task)
