@@ -9,7 +9,9 @@ class TasksController < ApplicationController
     tasks.each do |task|
       authorize!(:read, task)
 
-      new_field = { 'folder_name' => task.folder.name, 'project_name' => task.folder.project.name }
+      new_field = { 'folder_name' => task.folder.name,
+                    'project_name' => task.folder.project.name,
+                    'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json) }
       arr << JSON.parse(task.to_json).merge(new_field)
     end
 

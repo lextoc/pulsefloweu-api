@@ -23,7 +23,8 @@ class FoldersController < ApplicationController
     tasks.each do |task|
       authorize!(:read, task)
 
-      new_field = { 'total_duration_of_time_entries' => task.total_duration_of_time_entries }
+      new_field = { 'total_duration_of_time_entries' => task.total_duration_of_time_entries,
+                    'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json) }
       arr << JSON.parse(task.to_json).merge(new_field)
     end
 
