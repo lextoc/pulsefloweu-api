@@ -1,0 +1,11 @@
+development:
+  cloud_name: "dzhtghivi"
+  api_key: "922694575679915"
+  api_secret: "eHdmphirC2GVExziniOGNZOGkKQ"
+  secure: true
+
+production:
+  cloud_name: "dzhtghivi"
+  api_key: "922694575679915"
+  api_secret: "eHdmphirC2GVExziniOGNZOGkKQ"
+  secure: true
