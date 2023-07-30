@@ -18,13 +18,12 @@ class FoldersController < ApplicationController
     # tasks.each { |task| authorize!(:read, task) }
     # render_data(tasks)
 
-    # TODO: refactor it/clean it up
     arr = []
     tasks.each do |task|
       authorize!(:read, task)
 
       extra_fields = { 'total_duration_of_time_entries' => task.total_duration_of_time_entries,
-                    'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json) }
+                       'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json) }
       arr << JSON.parse(task.to_json).merge(extra_fields)
     end
 
