@@ -9,10 +9,10 @@ class TimeEntriesController < ApplicationController
     time_entries.each do |time_entry|
       authorize!(:read, time_entry)
 
-      new_field = { 'task_name' => time_entry.task.name,
+      extra_fields = { 'task_name' => time_entry.task.name,
                     'folder_name' => time_entry.folder.name,
                     'project_name' => time_entry.folder.project.name }
-      arr << JSON.parse(time_entry.to_json).merge(new_field)
+      arr << JSON.parse(time_entry.to_json).merge(extra_fields)
     end
 
     render(json: { success: true, data: arr, meta: pagination_info(time_entries) }.to_json)
