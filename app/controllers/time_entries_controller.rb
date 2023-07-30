@@ -49,7 +49,7 @@ class TimeEntriesController < ApplicationController
   end
 
   def destroy
-    time_entry = current_user.time_entry.find_by(id: params[:id])
+    time_entry = current_user.time_entries.find_by(id: params[:id])
     authorize!(:destroy, time_entry)
     time_entry.destroy
     render(json: { success: true }.to_json)
