@@ -21,7 +21,15 @@ class TasksController < ApplicationController
   def show
     task = current_user.tasks.find(params[:id])
     authorize!(:read, task)
-    render(json: { success: true, data: task }.to_json)
+
+    new_fields = { 'folder_name' => task.folder.name,
+                   'project_name' => task.folder.project.name,
+                   'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json) }
+    render(json: {
+             success: true,
+             data: JSON.parse(task.to_json).merge(new_fields)
+           })
+    # render(json: { success: true, data: task }.to_json)
   end
 
   def time_entries
