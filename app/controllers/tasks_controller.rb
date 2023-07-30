@@ -11,6 +11,7 @@ class TasksController < ApplicationController
 
       new_field = { 'folder_name' => task.folder.name,
                     'project_name' => task.folder.project.name,
+                    'project_id' => task.folder.project_id,
                     'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json) }
       arr << JSON.parse(task.to_json).merge(new_field)
     end
@@ -24,6 +25,7 @@ class TasksController < ApplicationController
 
     new_fields = { 'folder_name' => task.folder.name,
                    'project_name' => task.folder.project.name,
+                   'project_id' => task.folder.project_id,
                    'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json) }
     render(json: {
              success: true,
@@ -34,8 +36,20 @@ class TasksController < ApplicationController
 
   def time_entries
     time_entries = params[:active] ? active_time_entries : all_time_entries
-    time_entries.each { |time_entry| authorize!(:read, time_entry) }
-    render_data(time_entries)
+    # time_entries.each { |time_entry| authorize!(:read, time_entry) }
+
+    arr = []
+    time_entries.each do |time_entry|
+      authorize!(:read, time_entry)
+
+      new_field = { 'task_name' => time_entry.task.name,
+                    'folder_name' => time_entry.folder.name,
+                    'project_name' => time_entry.folder.project.name }
+      arr << JSON.parse(time_entry.to_json).merge(new_field)
+    end
+
+    render(json: { success: true, data: arr, meta: pagination_info(time_entries) }.to_json)
+    # render_data(time_entries)
   end
 
   def create
