@@ -16,6 +16,9 @@ Rails.application.routes.draw do
 
   namespace :misc do
     post 'stop/all', to: 'time_entries#stop'
+
     get 'running_timers', to: 'time_entries#running_timers'
+
+    get 'timesheets', to: 'timesheets#timesheets'
   end
 end
