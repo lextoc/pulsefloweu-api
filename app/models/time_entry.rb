@@ -1,5 +1,5 @@
 class TimeEntry < ApplicationRecord
-  default_scope { order(start_date: :desc) }
+  scope :recent_first, -> { order(created_at: :desc) }
 
   belongs_to :user
   belongs_to :task

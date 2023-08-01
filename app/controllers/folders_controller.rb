@@ -5,7 +5,7 @@ class FoldersController < ApplicationController
   before_action :authorize_folder, only: %i[show tasks]
 
   def index
-    render_data(current_user.folders.page(params[:page]))
+    render_data(current_user.folders.oldest_first.page(params[:page]))
   end
 
   def show
@@ -13,7 +13,7 @@ class FoldersController < ApplicationController
   end
 
   def tasks
-    tasks = @folder.tasks.page(params[:page])
+    tasks = @folder.tasks.recent_first.page(params[:page])
     tasks.each { |task| authorize!(:read, task) }
     tasks_data = build_task_data(tasks)
     render(json: { success: true, data: tasks_data, meta: pagination_info(tasks) }.to_json)

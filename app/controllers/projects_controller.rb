@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
   before_action :authorize_project, only: %i[show folders]
 
   def index
-    render_projects(current_user.projects.page(params[:page]))
+    render_projects(current_user.projects.oldest_first.page(params[:page]))
   end
 
   def show

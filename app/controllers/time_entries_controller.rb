@@ -37,11 +37,11 @@ class TimeEntriesController < ApplicationController
   end
 
   def active_time_entries
-    current_user.time_entries.where(end_date: nil).page(params[:page] || 1)
+    current_user.time_entries.recent_first.where(end_date: nil).page(params[:page] || 1)
   end
 
   def all_time_entries
-    current_user.time_entries.page(params[:page] || 1)
+    current_user.time_entries.recent_first.page(params[:page] || 1)
   end
 
   def build_time_entries_data(time_entries)

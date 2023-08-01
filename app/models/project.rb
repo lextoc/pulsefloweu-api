@@ -1,5 +1,5 @@
 class Project < ApplicationRecord
-  default_scope { order(created_at: :asc) }
+  scope :oldest_first, -> { order(created_at: :asc) }
 
   belongs_to :user # This is the owner.
 
