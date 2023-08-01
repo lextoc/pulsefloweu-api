@@ -6,9 +6,9 @@ class TimeEntry < ApplicationRecord
   belongs_to :folder
 
   validates :start_date, presence: true
-
   validates :user, presence: true
   validates :folder, presence: true
+
   validate :end_date_cannot_be_before_start_date
 
   def end_date_cannot_be_before_start_date
