@@ -30,7 +30,7 @@ class Misc::TimesheetsController < ApplicationController
   def fetch_time_entries(from_date, to_date, folder_ids)
     TimeEntry.joins(task: :folder)
              .where('folders.id IN (?) AND time_entries.start_date >= ? AND time_entries.end_date <= ?',
-                    folder_ids, from_date, to_date)
+                    folder_ids, from_date.beginning_of_day, to_date.end_of_day)
   end
 
   def authorize_time_entries(time_entries)
