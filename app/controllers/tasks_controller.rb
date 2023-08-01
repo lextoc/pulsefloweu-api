@@ -53,7 +53,7 @@ class TasksController < ApplicationController
         'project_id' => task.folder.project_id,
         'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json)
       }
-      JSON.parse(task.to_json).merge(extra_fields)
+      task.as_json.merge(extra_fields)
     end
   end
 
@@ -63,13 +63,11 @@ class TasksController < ApplicationController
     time_entries.each do |time_entry|
       date_key = time_entry.start_date.strftime('%F')
 
-      # Initialize the date_key entry if not present in the object
       object[date_key] ||= {
         time_entries: [],
         data: get_data_for_date(time_entry.start_date)
       }
 
-      # Authorize read for the time entry
       authorize!(:read, time_entry)
 
       extra_fields = {
@@ -78,7 +76,6 @@ class TasksController < ApplicationController
         'project_name' => time_entry.folder.project.name
       }
 
-      # Merge the extra_fields into the time_entry and add it to the corresponding date entry
       object[date_key][:time_entries] << time_entry.as_json.merge(extra_fields)
     end
 
