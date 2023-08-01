@@ -1,7 +1,8 @@
 class FoldersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_folder, only: %i[show update destroy tasks]
-  before_action :authorize_folders, only: %i[index show tasks]
+  before_action :authorize_folders, only: %i[index]
+  before_action :authorize_folder, only: %i[show tasks]
 
   def index
     render_data(current_user.folders.page(params[:page]))
@@ -46,6 +47,10 @@ class FoldersController < ApplicationController
 
   def authorize_folders
     current_user.folders.each { |folder| authorize!(:read, folder) }
+  end
+
+  def authorize_folder
+    authorize!(:read, @folder)
   end
 
   def build_task_data(tasks)
