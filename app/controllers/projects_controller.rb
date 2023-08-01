@@ -1,7 +1,8 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
   before_action :find_project, only: %i[show folders update destroy]
-  before_action :authorize_projects, only: %i[index show folders]
+  before_action :authorize_projects, only: %i[index]
+  before_action :authorize_project, only: %i[show folders]
 
   def index
     render_projects(current_user.projects.page(params[:page]))
@@ -12,7 +13,9 @@ class ProjectsController < ApplicationController
   end
 
   def folders
-    render_projects(@project.folders.page(params[:page]))
+    folders = @project.folders
+    folders.each { |folder| authorize!(:read, folder) }
+    render_projects(folders.page(params[:page]))
   end
 
   def create
@@ -44,6 +47,10 @@ class ProjectsController < ApplicationController
 
   def authorize_projects
     current_user.projects.each { |project| authorize!(:read, project) }
+  end
+
+  def authorize_project
+    authorize!(:read, @project)
   end
 
   def build_new_project(attributes)
