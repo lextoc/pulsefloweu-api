@@ -43,7 +43,12 @@ class Misc::TimesheetsController < ApplicationController
     time_entries.each do |time_entry|
       date_key = time_entry.start_date.strftime('%F')
       timesheets_data[date_key] ||= { time_entries: [], total_duration: 0 }
-      timesheets_data[date_key][:time_entries] << time_entry
+      timesheets_data[date_key][:time_entries] << {
+        id: time_entry.id,
+        start_date: time_entry.start_date,
+        end_date: time_entry.end_date,
+        task_name: time_entry.task.name
+      }
       timesheets_data[date_key][:total_duration] += time_entry_duration(time_entry)
     end
 
@@ -57,7 +62,12 @@ class Misc::TimesheetsController < ApplicationController
       week_start = time_entry.start_date.beginning_of_week
       date_key = week_start.strftime('%F')
       timesheets_data[date_key] ||= { time_entries: [], total_duration: 0 }
-      timesheets_data[date_key][:time_entries] << time_entry
+      timesheets_data[date_key][:time_entries] << {
+        id: time_entry.id,
+        start_date: time_entry.start_date,
+        end_date: time_entry.end_date,
+        task_name: time_entry.task.name
+      }
       timesheets_data[date_key][:total_duration] += time_entry_duration(time_entry)
     end
 
