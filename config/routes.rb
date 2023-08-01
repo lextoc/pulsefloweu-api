@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
     get 'running_timers', to: 'time_entries#running_timers'
 
-    get 'timesheets', to: 'timesheets#timesheets'
+    get 'timesheets_per_day', to: 'timesheets#timesheets_per_day'
+    get 'timesheets_per_week', to: 'timesheets#timesheets_per_week'
   end
 end
