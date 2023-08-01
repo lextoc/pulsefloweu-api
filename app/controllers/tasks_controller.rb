@@ -92,7 +92,9 @@ class TasksController < ApplicationController
 
   def get_data_for_date(date)
     time_entries = TimeEntry.where(start_date: date.beginning_of_day..date.end_of_day)
-    total_duration = time_entries.sum { |entry| entry.end_date ? (entry.end_date - entry.start_date).to_i : 0 }
+    total_duration = time_entries.sum do |entry|
+      entry.end_date ? (entry.end_date - entry.start_date).to_i : (Time.now - entry.start_date).to_i
+    end
     total_time_entries = time_entries.count
 
     {

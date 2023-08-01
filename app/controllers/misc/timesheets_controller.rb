@@ -75,9 +75,7 @@ class Misc::TimesheetsController < ApplicationController
   end
 
   def time_entry_duration(time_entry)
-    return 0 if time_entry.end_date.nil?
-
-    (time_entry.end_date - time_entry.start_date).to_i
+    time_entry.end_date ? (time_entry.end_date - time_entry.start_date).to_i : (Time.now - time_entry.start_date).to_i
   end
 
   def render_timesheets_response(from_date, to_date, timesheets_data, view_type)
