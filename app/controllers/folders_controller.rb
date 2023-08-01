@@ -15,8 +15,6 @@ class FoldersController < ApplicationController
 
   def tasks
     tasks = current_user.tasks.where(folder_id: params[:id]).page(params[:page] || 1)
-    # tasks.each { |task| authorize!(:read, task) }
-    # render_data(tasks)
 
     arr = []
     tasks.each do |task|
