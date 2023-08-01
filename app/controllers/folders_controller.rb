@@ -14,6 +14,7 @@ class FoldersController < ApplicationController
 
   def tasks
     tasks = @folder.tasks.page(params[:page])
+    tasks.each do |task| authorize!(:read, task) end
     tasks_data = build_task_data(tasks)
     render(json: { success: true, data: tasks_data, meta: pagination_info(tasks) }.to_json)
   end
