@@ -31,7 +31,6 @@ class Misc::TimesheetsController < ApplicationController
     TimeEntry.joins(task: :folder)
              .where('folders.id IN (?) AND time_entries.start_date >= ? AND time_entries.end_date <= ?',
                     folder_ids, from_date, to_date)
-             .page(params[:page] || 1)
   end
 
   def authorize_time_entries(time_entries)
@@ -77,6 +76,6 @@ class Misc::TimesheetsController < ApplicationController
       to_date: to_date.to_s,
       time_entries: timesheets_data,
       view_type:
-    }, meta: pagination_info(@time_entries) }.to_json)
+    } }.to_json)
   end
 end
