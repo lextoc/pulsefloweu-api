@@ -4,11 +4,14 @@ class ApplicationController < ActionController::API
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  class InvalidObject < StandardError; end
+
+  rescue_from CanCan::AccessDenied, with: :handle_access_denied
+  rescue_from ActionController::ParameterMissing, InvalidObject, with: :handle_bad_request
+
   respond_to :json
 
   protect_from_forgery unless: -> { request.format.json? }
-
-  class InvalidObject < StandardError; end
 
   protected
 
@@ -20,15 +23,11 @@ class ApplicationController < ActionController::API
 
   private
 
-  rescue_from CanCan::AccessDenied do |exception|
+  def handle_access_denied(exception)
     handle_exception(exception, 403, 'You are not authorized')
   end
 
-  rescue_from ActionController::ParameterMissing do |exception|
-    handle_exception(exception, 400, 'You made a bad request')
-  end
-
-  rescue_from InvalidObject do |exception|
+  def handle_bad_request(exception)
     handle_exception(exception, 400, 'You made a bad request')
   end
 
