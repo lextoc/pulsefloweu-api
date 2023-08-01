@@ -4,7 +4,7 @@ class ProjectsController < ApplicationController
   before_action :authorize_projects, only: %i[index show folders]
 
   def index
-    render_data(current_user.projects.page(params[:page]))
+    render_projects(current_user.projects.page(params[:page]))
   end
 
   def show
@@ -12,7 +12,7 @@ class ProjectsController < ApplicationController
   end
 
   def folders
-    render_data(@project.folders.page(params[:page]))
+    render_projects(@project.folders.page(params[:page]))
   end
 
   def create
@@ -72,9 +72,9 @@ class ProjectsController < ApplicationController
     project.destroy
   end
 
-  def render_data(data)
-    data.each { |record| authorize!(:read, record) }
-    render(json: { success: true, data:, meta: pagination_info(data) }.to_json)
+  def render_projects(projects)
+    projects.each { |project| authorize!(:read, project) }
+    render(json: { success: true, data: projects, meta: pagination_info(projects) }.to_json)
   end
 
   def render_not_found
