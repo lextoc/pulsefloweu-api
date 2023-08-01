@@ -61,21 +61,25 @@ class TasksController < ApplicationController
     object = {}
 
     time_entries.each do |time_entry|
-      object.store(time_entry.start_date.strftime('%F'), {
-                     time_entries: [],
-                     data: get_data_for_date(time_entry.start_date)
-                   })
-    end
+      date_key = time_entry.start_date.strftime('%F')
 
-    time_entries.each do |time_entry|
+      # Initialize the date_key entry if not present in the object
+      object[date_key] ||= {
+        time_entries: [],
+        data: get_data_for_date(time_entry.start_date)
+      }
+
+      # Authorize read for the time entry
       authorize!(:read, time_entry)
+
       extra_fields = {
         'task_name' => time_entry.task.name,
         'folder_name' => time_entry.folder.name,
         'project_name' => time_entry.folder.project.name
       }
-      date_key = time_entry.start_date.strftime('%F')
-      object[date_key][:time_entries] << JSON.parse(time_entry.to_json).merge(extra_fields)
+
+      # Merge the extra_fields into the time_entry and add it to the corresponding date entry
+      object[date_key][:time_entries] << time_entry.as_json.merge(extra_fields)
     end
 
     object

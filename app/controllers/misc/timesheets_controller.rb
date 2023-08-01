@@ -2,24 +2,33 @@ class Misc::TimesheetsController < ApplicationController
   before_action :authenticate_user!
 
   def timesheets
-    arr = []
-
     from_date = Date.parse(params[:from])
     to_date = Date.parse(params[:to])
-    folders = Folder.where(id: params[:folder_ids])
+    folder_ids = params[:folder_ids]
 
-    folders.each do |folder|
-      folder.tasks.each do |task|
-        task.time_entries.each do |time_entry|
-          arr << time_entry if time_entry.start_date >= from_date && time_entry.end_date <= to_date
-        end
-      end
-    end
+    time_entries = fetch_time_entries(from_date, to_date, folder_ids)
+    authorize_time_entries(time_entries)
+    render_timesheets_response(from_date, to_date, time_entries)
+  end
 
+  private
+
+  def fetch_time_entries(from_date, to_date, folder_ids)
+    TimeEntry.joins(task: :folder)
+             .where('folders.id IN (?) AND time_entries.start_date >= ? AND time_entries.end_date <= ?',
+                    folder_ids, from_date, to_date)
+             .page(params[:page] || 1)
+  end
+
+  def authorize_time_entries(time_entries)
+    time_entries.each { |time_entry| authorize!(:read, time_entry) }
+  end
+
+  def render_timesheets_response(from_date, to_date, time_entries)
     render(json: { success: true, data: {
-      from_date: params[:from],
-      to_date: params[:to],
-      time_entries: arr
-    } }.to_json)
+      from_date:,
+      to_date:,
+      time_entries:
+    }, meta: pagination_info(time_entries) }.to_json)
   end
 end
