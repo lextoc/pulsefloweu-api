@@ -13,7 +13,7 @@ class FoldersController < ApplicationController
   end
 
   def tasks
-    tasks = @folder.tasks.recent_first.page(params[:page])
+    tasks = @folder.tasks.sorted_by_newest_time_entries.page(params[:page])
     tasks.each { |task| authorize!(:read, task) }
     tasks_data = build_task_data(tasks)
     render(json: { success: true, data: tasks_data, meta: pagination_info(tasks) }.to_json)

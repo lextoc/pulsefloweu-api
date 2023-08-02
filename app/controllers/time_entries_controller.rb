@@ -4,7 +4,6 @@ class TimeEntriesController < ApplicationController
   def index
     time_entries = params[:active] ? active_time_entries : all_time_entries
     object = build_time_entries_data(time_entries)
-
     render(json: { success: true, data: object, meta: pagination_info(time_entries) }.to_json)
   end
 

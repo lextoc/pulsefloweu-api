@@ -1,6 +1,13 @@
 class Task < ApplicationRecord
   scope :recent_first, -> { order(created_at: :desc) }
 
+  scope :sorted_by_newest_time_entries, lambda {
+    left_outer_joins(:time_entries)
+      .select('tasks.*', 'MAX(time_entries.start_date) AS newest_time_entry')
+      .group('tasks.id')
+      .order('newest_time_entry DESC NULLS LAST')
+  }
+
   belongs_to :user
   belongs_to :folder
   has_many :time_entries, dependent: :delete_all
