@@ -46,7 +46,9 @@ class TimeEntriesController < ApplicationController
   def build_time_entries_data(time_entries)
     object = {}
 
-    time_entries.each do |time_entry|
+    sorted_time_entries = time_entries.sort_by { |time_entry| time_entry.start_date }.reverse
+
+    sorted_time_entries.each do |time_entry|
       start_date_formatted = time_entry.start_date.strftime('%F')
       object[start_date_formatted] ||= {
         time_entries: [],
