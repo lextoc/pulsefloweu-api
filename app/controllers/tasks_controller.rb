@@ -60,7 +60,7 @@ class TasksController < ApplicationController
   def build_time_entries_data(time_entries)
     object = {}
 
-    time_entries.each do |time_entry|
+    time_entries.recent_first.each do |time_entry|
       date_key = time_entry.start_date.strftime('%F')
 
       object[date_key] ||= {
@@ -78,8 +78,6 @@ class TasksController < ApplicationController
 
       object[date_key][:time_entries] << time_entry.as_json.merge(extra_fields)
     end
-
-    object.each_value { |data| data[:time_entries].sort_by! { |te| te['start_date'] } }
 
     object
   end
