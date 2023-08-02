@@ -79,6 +79,8 @@ class TasksController < ApplicationController
       object[date_key][:time_entries] << time_entry.as_json.merge(extra_fields)
     end
 
+    object.each_value { |data| data[:time_entries].sort_by! { |te| te['start_date'] } }
+
     object
   end
 
