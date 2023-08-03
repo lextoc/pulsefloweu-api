@@ -7,10 +7,10 @@ class Misc::TimeEntriesController < ApplicationController
     render(json: { success: true, data: time_entries }.to_json)
   end
 
-  def running_timers
+  def running_time_entries
     time_entries = current_user.time_entries.where(end_date: nil).page(params[:page] || 1)
-    running_timers_data = build_running_timers_data(time_entries)
-    render(json: { success: true, data: running_timers_data, meta: pagination_info(time_entries) }.to_json)
+    running_time_entries_data = build_running_time_entries_data(time_entries)
+    render(json: { success: true, data: running_time_entries_data, meta: pagination_info(time_entries) }.to_json)
   end
 
   private
@@ -21,7 +21,7 @@ class Misc::TimeEntriesController < ApplicationController
     end
   end
 
-  def build_running_timers_data(time_entries)
+  def build_running_time_entries_data(time_entries)
     time_entries.map do |time_entry|
       authorize!(:read, time_entry)
       extra_fields = { 'task_name' => time_entry.task.name }

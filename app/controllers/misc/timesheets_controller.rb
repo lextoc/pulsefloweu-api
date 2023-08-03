@@ -52,7 +52,7 @@ class Misc::TimesheetsController < ApplicationController
       timesheets_data[date_key][:total_duration] += time_entry_duration(time_entry)
     end
 
-    timesheets_data
+    timesheets_data.sort_by { |date_key, _| Date.parse(date_key) }.reverse.to_h
   end
 
   def group_time_entries_by_week(time_entries)
@@ -71,7 +71,7 @@ class Misc::TimesheetsController < ApplicationController
       timesheets_data[date_key][:total_duration] += time_entry_duration(time_entry)
     end
 
-    timesheets_data
+    timesheets_data.sort_by { |date_key, _| Date.parse(date_key) }.reverse.to_h
   end
 
   def time_entry_duration(time_entry)
