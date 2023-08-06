@@ -3,9 +3,9 @@ class TasksController < ApplicationController
   before_action :find_task, only: %i[show update destroy]
 
   def index
-    tasks = current_user.tasks.sorted_by_newest_time_entries.all
-    tasks.where(project_id: params[:project_id]) if params[:project_id]
-    tasks.page(params[:page] || 1)
+    tasks = current_user.tasks.sorted_by_newest_time_entries
+    tasks = apply_filters(tasks)
+    tasks = tasks.page(params[:page] || 1)
 
     task_data = build_task_data(tasks)
     render(json: { success: true, data: task_data, meta: pagination_info(tasks) }.to_json)
@@ -41,6 +41,12 @@ class TasksController < ApplicationController
 
   def task_params
     params.require(:task).permit(:name, :project_id, :folder_id)
+  end
+
+  def apply_filters(tasks)
+    tasks = tasks.filter_by_project_id(params[:project_id]) if params[:project_id]
+    tasks = tasks.where(folder_id: params[:folder_id]) if params[:folder_id]
+    tasks
   end
 
   def find_task

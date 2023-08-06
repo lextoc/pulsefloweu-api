@@ -8,6 +8,10 @@ class Task < ApplicationRecord
       .order('newest_time_entry DESC NULLS LAST')
   }
 
+  scope :filter_by_project_id, lambda { |project_id|
+    joins(:folder).where(folders: { project_id: })
+  }
+
   belongs_to :user
   belongs_to :folder
   has_many :time_entries, dependent: :delete_all
