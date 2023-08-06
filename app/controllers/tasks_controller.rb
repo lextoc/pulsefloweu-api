@@ -3,7 +3,10 @@ class TasksController < ApplicationController
   before_action :find_task, only: %i[show update destroy]
 
   def index
-    tasks = current_user.tasks.sorted_by_newest_time_entries.all.page(params[:page] || 1)
+    tasks = current_user.tasks.sorted_by_newest_time_entries.all
+    tasks.where(project_id: params[:project_id]) if params[:project_id]
+    tasks.page(params[:page] || 1)
+
     task_data = build_task_data(tasks)
     render(json: { success: true, data: task_data, meta: pagination_info(tasks) }.to_json)
   end
