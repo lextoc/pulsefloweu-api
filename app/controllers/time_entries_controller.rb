@@ -67,7 +67,8 @@ class TimeEntriesController < ApplicationController
     extra_fields = {
       'task_name' => time_entry.task.name,
       'folder_name' => time_entry.folder.name,
-      'project_name' => time_entry.folder.project.name
+      'project_name' => time_entry.folder.project.name,
+      'project_id' => time_entry.folder.project.id
     }
 
     date_key = time_entry.start_date.strftime('%F')
