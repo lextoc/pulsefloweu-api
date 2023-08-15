@@ -45,6 +45,12 @@ class TasksController < ApplicationController
 
   def find_task
     @task = current_user.tasks.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    render_not_found
+  end
+
+  def render_not_found
+    render(json: { success: false, error: 'Task not found' }.to_json, status: :not_found)
   end
 
   def build_task_data(tasks)
@@ -58,27 +64,6 @@ class TasksController < ApplicationController
       }
       task.as_json.merge(extra_fields)
     end
-  end
-
-  def active_time_entries
-    current_user.time_entries.where(task_id: params[:id]).where(end_date: nil).page(params[:page] || 1)
-  end
-
-  def all_time_entries
-    current_user.time_entries.where(task_id: params[:id]).all.page(params[:page] || 1)
-  end
-
-  def get_data_for_date(date)
-    time_entries = TimeEntry.where(start_date: date.beginning_of_day..date.end_of_day)
-    total_duration = time_entries.sum do |entry|
-      entry.end_date ? (entry.end_date - entry.start_date).to_i : (Time.now - entry.start_date).to_i
-    end
-    total_time_entries = time_entries.count
-
-    {
-      total_duration:,
-      total_time_entries:
-    }
   end
 
   def build_new_task(attributes)

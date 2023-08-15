@@ -82,6 +82,12 @@ class TimeEntriesController < ApplicationController
 
   def find_time_entry_by_id(id)
     current_user.time_entries.find(id)
+  rescue ActiveRecord::RecordNotFound
+    render_not_found
+  end
+
+  def render_not_found
+    render(json: { success: false, error: 'Time entry not found' }.to_json, status: :not_found)
   end
 
   def build_new_time_entry(attributes)
