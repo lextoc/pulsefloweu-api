@@ -1,9 +1,7 @@
 class User < ApplicationRecord
-  # Include default devise modules.
-  # :confirmable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :omniauthable
+         :omniauthable, :confirmable
   include DeviseTokenAuth::Concerns::User
 
   has_one_attached :avatar

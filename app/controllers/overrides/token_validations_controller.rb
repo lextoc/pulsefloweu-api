@@ -2,8 +2,7 @@ class Overrides::TokenValidationsController < DeviseTokenAuth::TokenValidationsC
   def validate_token
     # @resource will have been set by set_user_by_token concern
     if @resource
-      avatar = { 'avatar' => nil }
-      avatar = { 'avatar' => rails_blob_url(@resource.avatar) } if @resource.avatar.attached?
+      avatar = { 'avatar' => @resource.avatar.attached? ? rails_blob_url(@resource.avatar) : nil }
 
       render(json: {
                success: true,
