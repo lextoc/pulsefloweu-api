@@ -5,10 +5,7 @@ Rails.application.routes.draw do
 
   resources :projects
   resources :folders
-
   resources :tasks
-  get 'tasks/:id/time_entries', to: 'tasks#time_entries'
-
   resources :time_entries
 
   namespace :misc do

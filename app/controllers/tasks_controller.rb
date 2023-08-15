@@ -16,12 +16,6 @@ class TasksController < ApplicationController
     render(json: { success: true, data: task_data.first }.to_json)
   end
 
-  def time_entries
-    time_entries = params[:active] ? active_time_entries : all_time_entries
-    object = build_time_entries_data(time_entries)
-    render(json: { success: true, data: object, meta: pagination_info(time_entries) }.to_json)
-  end
-
   def create
     task = build_new_task(task_params)
     render(json: { success: true, data: task }.to_json)
