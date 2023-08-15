@@ -5,7 +5,9 @@ class FoldersController < ApplicationController
   before_action :authorize_folder, only: %i[show tasks]
 
   def index
-    render_data(current_user.folders.oldest_first.page(params[:page]))
+    folders = current_user.folders.oldest_first.page(params[:page])
+    folders.where(project_id: params[:project_id]) if params[:project_id]
+    render_data(folders)
   end
 
   def show

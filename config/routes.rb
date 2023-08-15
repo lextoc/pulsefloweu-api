@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   }
 
   resources :projects
-  get 'projects/:id/folders', to: 'projects#folders'
 
   resources :folders
   get 'folders/:id/tasks', to: 'folders#tasks'

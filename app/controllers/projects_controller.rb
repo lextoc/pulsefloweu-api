@@ -18,12 +18,6 @@ class ProjectsController < ApplicationController
     render(json: { success: true, data: @project }.to_json)
   end
 
-  def folders
-    folders = @project.folders.page(params[:page])
-    folders.each { |folder| authorize!(:read, folder) }
-    render(json: { success: true, data: folders, meta: pagination_info(folders) }.to_json)
-  end
-
   def create
     project = build_new_project(project_params)
     render(json: { success: true, data: project }.to_json)
