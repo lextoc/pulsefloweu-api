@@ -14,13 +14,6 @@ class FoldersController < ApplicationController
     render(json: { success: true, data: @folder }.to_json)
   end
 
-  def tasks
-    tasks = @folder.tasks.recent_first.page(params[:page])
-    tasks.each { |task| authorize!(:read, task) }
-    tasks_data = build_task_data(tasks)
-    render(json: { success: true, data: tasks_data, meta: pagination_info(tasks) }.to_json)
-  end
-
   def create
     folder = build_new_folder(folder_params)
     render(json: { success: true, data: folder }.to_json)
