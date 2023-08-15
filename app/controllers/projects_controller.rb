@@ -5,7 +5,13 @@ class ProjectsController < ApplicationController
   before_action :authorize_project, only: %i[show folders]
 
   def index
-    render_projects(current_user.projects.oldest_first.page(params[:page]))
+    projects = if params[:latest_time_entry_first]
+                 current_user.projects.latest_time_entry_first.page(params[:page])
+               else
+                 current_user.projects.oldest_first.page(params[:page])
+               end
+    projects.each { |project| authorize!(:read, project) }
+    render(json: { success: true, data: projects, meta: pagination_info(projects) }.to_json)
   end
 
   def show
@@ -13,9 +19,9 @@ class ProjectsController < ApplicationController
   end
 
   def folders
-    folders = @project.folders
+    folders = @project.folders.page(params[:page])
     folders.each { |folder| authorize!(:read, folder) }
-    render_projects(folders.page(params[:page]))
+    render(json: { success: true, data: folders, meta: pagination_info(folders) }.to_json)
   end
 
   def create
@@ -77,11 +83,6 @@ class ProjectsController < ApplicationController
   def destroy_project(project)
     authorize!(:destroy, project)
     project.destroy
-  end
-
-  def render_projects(projects)
-    projects.each { |project| authorize!(:read, project) }
-    render(json: { success: true, data: projects, meta: pagination_info(projects) }.to_json)
   end
 
   def render_not_found

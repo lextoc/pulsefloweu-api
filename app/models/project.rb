@@ -1,5 +1,10 @@
 class Project < ApplicationRecord
   scope :oldest_first, -> { order(created_at: :asc) }
+  scope :latest_time_entry_first, lambda {
+    joins(folders: { tasks: :time_entries })
+      .group('projects.id')
+      .order('MAX(time_entries.created_at) DESC')
+  }
 
   belongs_to :user # This is the owner.
 
