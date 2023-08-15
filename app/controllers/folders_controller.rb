@@ -1,8 +1,8 @@
 class FoldersController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_folder, only: %i[show update destroy tasks]
+  before_action :find_folder, only: %i[show update destroy]
   before_action :authorize_folders, only: %i[index]
-  before_action :authorize_folder, only: %i[show tasks]
+  before_action :authorize_folder, only: %i[show]
 
   def index
     folders = current_user.folders.oldest_first.page(params[:page])
@@ -47,17 +47,6 @@ class FoldersController < ApplicationController
 
   def authorize_folder
     authorize!(:read, @folder)
-  end
-
-  def build_task_data(tasks)
-    tasks.map do |task|
-      authorize!(:read, task)
-      extra_fields = {
-        'total_duration_of_time_entries' => task.total_duration_of_time_entries,
-        'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json)
-      }
-      JSON.parse(task.to_json).merge(extra_fields)
-    end
   end
 
   def build_new_folder(attributes)

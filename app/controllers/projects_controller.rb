@@ -1,8 +1,8 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_project, only: %i[show folders update destroy]
+  before_action :find_project, only: %i[show update destroy]
   before_action :authorize_projects, only: %i[index]
-  before_action :authorize_project, only: %i[show folders]
+  before_action :authorize_project, only: %i[show]
 
   def index
     projects = if params[:latest_time_entry_first]

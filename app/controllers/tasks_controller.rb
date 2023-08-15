@@ -60,31 +60,6 @@ class TasksController < ApplicationController
     end
   end
 
-  def build_time_entries_data(time_entries)
-    object = {}
-
-    time_entries.recent_first.each do |time_entry|
-      date_key = time_entry.start_date.strftime('%F')
-
-      object[date_key] ||= {
-        time_entries: [],
-        data: get_data_for_date(time_entry.start_date)
-      }
-
-      authorize!(:read, time_entry)
-
-      extra_fields = {
-        'task_name' => time_entry.task.name,
-        'folder_name' => time_entry.folder.name,
-        'project_name' => time_entry.folder.project.name
-      }
-
-      object[date_key][:time_entries] << time_entry.as_json.merge(extra_fields)
-    end
-
-    object
-  end
-
   def active_time_entries
     current_user.time_entries.where(task_id: params[:id]).where(end_date: nil).page(params[:page] || 1)
   end
