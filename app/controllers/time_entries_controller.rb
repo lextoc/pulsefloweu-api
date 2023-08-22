@@ -118,6 +118,7 @@ class TimeEntriesController < ApplicationController
 
   def get_data_for_date(date)
     time_entries = TimeEntry.where(start_date: date.beginning_of_day..date.end_of_day)
+    time_entries = time_entries.where(task_id: params[:task_id]) if params[:task_id].present?
     total_duration = time_entries.sum do |entry|
       entry.end_date ? (entry.end_date - entry.start_date).to_i : (Time.now - entry.start_date).to_i
     end
