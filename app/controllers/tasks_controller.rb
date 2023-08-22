@@ -60,7 +60,8 @@ class TasksController < ApplicationController
         'folder_name' => task.folder.name,
         'project_name' => task.folder.project.name,
         'project_id' => task.folder.project_id,
-        'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json)
+        'active_time_entries' => JSON.parse(task.time_entries.where(end_date: nil).all.to_json),
+        'total_duration_of_time_entries' => task.total_duration_of_time_entries
       }
       task.as_json.merge(extra_fields)
     end
